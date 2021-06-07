@@ -1,0 +1,33 @@
+<div>
+  <h3 *ngIf="editMode">Edit Item</h3>
+  <h3 *ngIf="!editMode">Add New Item</h3>
+</div>
+<form (ngSubmit)="onAddDetail(f)" #f="ngForm">
+<div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Name</label>
+    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Name" ngModel name="name" required #name=ngModel >
+  </div>
+  <div class="mb-3 help-box">
+    <p *ngIf="!name.valid && name.touched">please enter valid data</p>
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Amount</label>
+    <input 
+    type="Number"
+    class="form-control" 
+    id="exampleFormControlInput1" 
+    placeholder="Amount" 
+    ngModel 
+    name="amount" 
+    required
+    pattern="^[1-9]+[0-9]*$"
+    #amount=ngModel >
+  </div>
+  <div class="mb-3 help-box">
+    <p *ngIf="!name.valid && name.touched">please enter valid data</p>
+  </div>
+ 
+<button type="submit" class="btn btn-success " [disabled]="!f.valid">{{editMode? "Update": "Add"}}</button>
+<button *ngIf="editMode" type="button" class="btn btn-danger " (click)="onDelete(index)">Delete</button>
+<button type="button" class="btn btn-primary" (click)="onClear()">Clear</button>
+</form>

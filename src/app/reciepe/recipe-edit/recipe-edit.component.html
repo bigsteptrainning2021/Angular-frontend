@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-xs-12">
+    <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-xs 12">
+          <button type="submit" class="btn btn-success" [disabled]="!recipeForm.valid">Save</button>
+          <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" class="form-control" formControlName="name">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="img">Image Url</label>
+            <input type="text" id="img" class="form-control" formControlName="imgPath" #img>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea type="text" id="description" class="form-control" rows="6" formControlName="description"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" >
+        <div class="col-xs-12" formArrayName="ingridents">
+          <div class="row"
+          *ngFor="let ingridentCtrl of recipeForm.get('ingridents')['controls'] let i=index "
+           formGroupName="{{i}}" style="margin-top:7px;">
+            <div class="col-sm-8">
+              <input type="text" id="name" class="form-control" formControlName="name">
+            </div>
+            <div class="col-sm-2">
+              <input type="number" id="amount" class="form-control" formControlName="amount">
+            </div>
+            <div class="col-sm-2">
+              <button class="btn btn-danger">X</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs 12 mt-3">
+          <button type="button" class="btn btn-success" (click)="onAddItem()">Add Item</button>
+        </div>
+      </div>
+
+
+</form>
+</div>
+</div>

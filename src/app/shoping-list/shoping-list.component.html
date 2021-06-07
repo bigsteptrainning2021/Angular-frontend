@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="col-md-8 mb-3">
+        <app-shoping-edit></app-shoping-edit>
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <h2>Shopping List</h2>
+        <ul class="list-group" *ngFor="let ing of Ingrident index as i">
+            <a class="list-group-item" (click)="onEditItem(i)">{{ing.name}}-Price:{{ing.amount}}/Kg</a>
+        </ul>
+    </div>
+</div>
