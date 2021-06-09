@@ -11,28 +11,32 @@ import { Recipe } from '../Recipe';
   styleUrls: ['./reciepe-details.component.css']
 })
 export class ReciepeDetailsComponent implements OnInit {
-  recipeDetail:Recipe;
-  id:number;
+  recipeDetail;
+  id:string;
   constructor(private recipeservice:RecipeServices,private route:ActivatedRoute,private http:HttpClient) { }
 
   ngOnInit(): void {
 
     this.route.params.subscribe((params:Params)=>{
-      this.id=+params['id'];
-      this.recipeDetail=this.recipeservice.getrecipe(this.id);
-      this.data();
+      this.id=params['id'];
+      // this.recipeDetail=this.recipeservice.getrecipe(this.id);
+      this.http.post('http://localhost:3000/getRecipeById/'+this.id,{}).subscribe(res=>{
+        this.recipeDetail=res;
+        console.log(this.recipeDetail)
+      })
+      // this.data();
     })
   }
   onClickSave(){
     this.recipeservice.addToShoppingList(this.recipeDetail.ingridents);
   }
-  onDelete(index:number){
+  onDelete(index:string){
     this.recipeservice.deleteRecipe(index);
   }
 
-  data(){
-    this.http.get('http://localhost:3000/m').subscribe(data=>{
-      console.log(data[0])
-    })
-  }
+  // data(){
+  //   this.http.get('http://localhost:3000/').subscribe(data=>{
+  //     console.log(data[0])
+  //   })
+  // }
 }

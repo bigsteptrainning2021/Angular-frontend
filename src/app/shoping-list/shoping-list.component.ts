@@ -1,34 +1,42 @@
+import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ThrowStmt } from '@angular/compiler';
-import { Component, DoCheck, OnInit } from '@angular/core';
-import { ShopingService } from '../Services/Shoping.servive';
-import { Ingredients } from '../Shared/Ingridents';
+import { Subscription } from 'rxjs';
+// import { Ingredient } from '../shared/Ingredient';
+import { ShopingService } from 'src/app/Services/Shoping.servive';
+
 
 @Component({
   selector: 'app-shoping-list',
   templateUrl: './shoping-list.component.html',
-  styleUrls: ['./shoping-list.component.css'],
-  
+  styleUrls: ['./shoping-list.component.css']
 })
-export class ShopingListComponent implements OnInit,DoCheck {
-Ingrident=[];
+export class ShopingListComponent implements OnInit, OnDestroy {
+  public ingredients;
+  public data;
 
-  constructor(private shopingservice:ShopingService,private http:HttpClient) { }
+  constructor(private slService:ShopingService,
+    private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.http.get('http://localhost:3000/getShopping').subscribe((res:[])=>{
-      this.Ingrident=res;
+    this.slService.getshoping();
+   this.http.get('http://localhost:3000/getShopping').subscribe((res:[]) => {
+        this.ingredients = res;
       })
-  }
-  ngDoCheck(){
-    this.http.get('http://localhost:3000/getShopping').subscribe((res:[])=>{
-      this.Ingrident=res;
+      this.slService.shopingEmitter.subscribe((ingridient:[])=>{
+        this.ingredients=ingridient
+        console.log(this.ingredients)
       })
     
+   
   }
 
-  onEditItem(index:number){
-    this.shopingservice.editShopping.next(index);
+  
+
+
+  onEdit(index: string) {
+    this.slService.editShopping.next(index)
   }
- 
+
+  ngOnDestroy() {
+  }
 }

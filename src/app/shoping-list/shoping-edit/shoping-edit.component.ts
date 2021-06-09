@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ShopingService } from 'src/app/Services/Shoping.servive';
-import { Ingredients } from 'src/app/Shared/Ingridents';
+
 
 
 @Component({
@@ -11,51 +11,57 @@ import { Ingredients } from 'src/app/Shared/Ingridents';
   templateUrl: './shoping-edit.component.html',
   styleUrls: ['./shoping-edit.component.css']
 })
-export class ShopingEditComponent implements OnInit, OnDestroy {
+export class ShopingEditComponent implements OnInit, AfterContentInit {
   @ViewChild('f') slform: NgForm;
   subscription: Subscription;
-  index: number;
+  index: string;
   editMode: boolean = false;
-  ingrident: Ingredients;
-  constructor(private shopingrecipe: ShopingService,private http:HttpClient) { }
+  ingrident;
+  constructor(private http: HttpClient, private shopingrecipe: ShopingService) { }
 
   ngOnInit(): void {
-    this.subscription = this.shopingrecipe.editShopping.subscribe((index: number) => {
+
+  }
+  ngAfterContentInit() {
+    this.subscription = this.shopingrecipe.editShopping.subscribe((index: string) => {
       this.index = index;
       this.editMode = true;
-      this.ingrident = this.shopingrecipe.getShopingByIndex(this.index);
-      this.slform.setValue({
-        name: this.ingrident.name,
-        amount: this.ingrident.amount
+      this.http.get('http://localhost:3000/getShoppingById/' + index).subscribe(res => {
+        console.log(res)
+        this.ingrident = res;
+        this.slform.setValue({
+          name: this.ingrident.name,
+          amount: this.ingrident.amount
+        })
       })
     })
   }
-  
-  
-  // Connected with Database
+
+
+  // Add and Update shopping List
   onAddDetail(data: NgForm) {
-
-    const data1 = new Ingredients(data.value.name, data.value.amount);
-    if (this.editMode){
-      this.shopingrecipe.updateIngrident(this.index, data1);
-      this.editMode=false;
+    if (this.editMode) {
+      this.shopingrecipe.updateIngrident(this.index,data);
+      this.editMode = false;
     }
-    else
-      this.shopingrecipe.addShoping(data1);
-
+    else 
+      this.shopingrecipe.addShoping(data);
     data.reset();
-
   }
 
-  onClear(){
+
+  //Clear form data
+  onClear() {
     this.slform.reset();
   }
 
-  onDelete(index:number){
+
+  onDelete(index: string) {
     this.onClear();
     this.shopingrecipe.deleteIngridents(index);
     this.editMode=false;
-    alert("Successfully Deleted Item");
+   
+
   }
 
   ngOnDestroy() {

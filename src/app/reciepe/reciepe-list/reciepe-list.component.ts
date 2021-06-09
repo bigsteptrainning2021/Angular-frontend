@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit} from '@angular/core';
 import { RecipeServices } from 'src/app/Services/Recipe.services';
 import { Recipe } from '../Recipe';
@@ -9,16 +10,19 @@ import { Recipe } from '../Recipe';
 })
 export class ReciepeListComponent implements OnInit {
   
-recipes:Recipe[];
-  constructor(private recipeservice:RecipeServices) { 
+recipes;
+  constructor(private recipeservice:RecipeServices,private http:HttpClient) { 
     
   }
 
   ngOnInit(): void {
-    this.recipes=this.recipeservice.getrecipes();
+    this.recipeservice.getrecipes();
+    this.http.get('http://localhost:3000/getRecipe').subscribe((res:[])=>{
+            this.recipes=res
+        })
     this.recipeservice.recipeChanged.subscribe(
-      (recipe:Recipe[])=>{
-        this.recipes=this.recipeservice.getrecipes();
+      (recipe)=>{
+        this.recipes=recipe;
       }
     )
   

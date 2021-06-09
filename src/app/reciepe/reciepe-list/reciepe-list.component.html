@@ -3,5 +3,5 @@
 </div>
 <hr/>
 <div >
-<app-reciepe-item *ngFor="let recipel of recipes index as i" [recipe]="recipel" [index]="i"></app-reciepe-item>
+<app-reciepe-item *ngFor="let recipel of recipes index as i" [recipe]="recipel" [index]="recipel._id"></app-reciepe-item>
 </div>

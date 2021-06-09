@@ -16,6 +16,7 @@ export class ReciepeItemComponent implements OnInit {
  }
 
   ngOnInit(): void {
+    console.log(this.recipe)
   }
 
 }
